@@ -1,0 +1,13 @@
+{
+  "name": "multivaluedictionary",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+  "start": "tsx src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.2",
+    "tsx": "^4.15.5",
+    "typescript": "^5.4.5"
+  }
+}

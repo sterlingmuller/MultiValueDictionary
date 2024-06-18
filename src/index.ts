@@ -43,6 +43,6 @@ export const handleCommand = (
 rl.prompt();
 };
 
-rl.on('line', handleCommand)
+rl.on('line', handleCommand);
 
 rl.question(indexMessages.initQuestion, handleCommand);

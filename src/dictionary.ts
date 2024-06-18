@@ -46,15 +46,15 @@ class Dictionary {
     return membersArr;
   }
 
-  add(key: string, value: string) {
+  add(key: string, member: string) {
     const values = this.data.get(key) || [];
 
-    if (!key || !value) {
-      throw 'ADD requires a key and a value';
-    } else if (values.includes(value)) {
+    if (!key || !member) {
+      throw 'ADD requires a key and a member';
+    } else if (values.includes(member)) {
       throw 'member already exists for the key';
     } else {
-      values.push(value);
+      values.push(member);
 
       this.data.set(key, values);
 
@@ -62,24 +62,24 @@ class Dictionary {
     }
   }
 
-  remove(key: string, value: string) {
-    const membersArr = this.data.get(key);
+  remove(key: string, member: string) {
+    const members = this.data.get(key);
 
-    if (!key || !value) {
-      throw 'REMOVE requires a key and a value';
-    } else if (!membersArr) {
+    if (!key || !member) {
+      throw 'REMOVE requires a key and a member';
+    } else if (!members) {
       throw 'key does not exist';
-    } else if (!membersArr.includes(value)) {
+    } else if (!members.includes(member)) {
       throw 'member does not exist on key';
-    } else if (membersArr.length === 1) {
+    } else if (members.length === 1) {
       this.data.delete(key);
 
       return 'Removed';
     } else {
-      const valueIndex = membersArr.indexOf(value);
-      membersArr.splice(valueIndex, 1);
+      const memberIndex = members.indexOf(member);
+      members.splice(memberIndex, 1);
 
-      this.data.set(key, membersArr);
+      this.data.set(key, members);
 
       return 'Removed';
     }
@@ -111,13 +111,13 @@ class Dictionary {
     }
   }
 
-  memberExists(key: string, value: string) {
-    if (!key || !value) {
-      throw `MEMBEREXISTS requires a key and a value`;
+  memberExists(key: string, member: string) {
+    if (!key || !member) {
+      throw `MEMBEREXISTS requires a key and a member`;
     } else {
       const members = this.data.get(key) || [];
 
-      return members.includes(value);
+      return members.includes(member);
     }
   }
 
@@ -132,22 +132,19 @@ class Dictionary {
   }
 
   items() {
-    const itemsArray: string[] = [];
+    const items: string[] = [];
 
-    for (const [key, values] of this.data.entries()) {
-      for (const value of values) {
-        itemsArray.push(`${key}: ${value}`);
+    for (const [key, value] of this.data.entries()) {
+      for (const member of value) {
+        items.push(`${key}: ${member}`);
       }
     }
 
-    return itemsArray;
+    return items;
   }
 
   help() {
-    const commandsArr = Object.keys(this.commands);
-    const commandsStr = commandsArr.join(' ');
-
-    return commandsStr;
+    return Object.keys(this.commands).join(' ');
   }
 
   import(filePath: string) {
@@ -159,10 +156,10 @@ class Dictionary {
     }
     try {
       const fileContents = fs.readFileSync(filePath, { encoding: 'utf8' });
-      const data: { [key: string]: string[] } = JSON.parse(fileContents);
+      const importData: { [key: string]: string[] } = JSON.parse(fileContents);
 
-      for (const key in data) {
-        this.data.set(key, data[key]);
+      for (const key in importData) {
+        this.data.set(key, importData[key]);
       }
 
       return 'Dictionary imported!';

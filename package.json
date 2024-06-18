@@ -6,11 +6,12 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "start": "tsx src/index.ts",
-    "start:experimental": "EXPERIMENTAL_LOGGING=true tsx src/index.ts"
+    "start:experimental": "cross-env EXPERIMENTAL_LOGGING=true tsx src/index.ts"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
     "@types/node": "^20.14.2",
+    "cross-env": "^7.0.3",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.5",
     "tsx": "^4.15.5",

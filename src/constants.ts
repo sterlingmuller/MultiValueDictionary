@@ -9,8 +9,8 @@ export const RESPONSE_COLOR = `${cyan}%s${reset}`;
 export const ERROR_COLOR = `${red}%s${reset}`;
 
 export const styledPrompt = `${green}>${reset} `;
-export const styledQuestion = `${green}Type a command to get started\nTip: You can use the 'Help' command to see a list of commands available\n>${reset} `;
+export const styledInitQuestion = `${green}Type a command to get started\nTip: You can use the 'Help' command to see a list of commands available\n>${reset} `;
 
 export const standardPrompt = '> ';
-export const standardQuestion =
+export const standardInitQuestion =
   "Type a command to get started\nTip: You can use the 'Help' command to see a list of commands available\n> ";

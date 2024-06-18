@@ -1,40 +1,22 @@
-import { ReadLine } from 'readline';
-import Dictionary from './dictionary';
 import * as c from './constants';
-import createLogger from './loggerFactory';
+import Logger from './logger';
+import StylizedLogger from './stylizedLogger';
 
-export const handleCommand = async (
-  dictionary: Dictionary,
-  userInput: string,
-  rl: ReadLine,
-) => {
-  const Logger = createLogger();
-  const [command, key, ...values] = userInput.split(' ').filter(Boolean);
-  const formattedCommand = command.toUpperCase();
-
-  if (formattedCommand === 'EXIT') {
-    dictionary.exit(rl);
-    return;
+export const getLogger = () => {
+  if (process.env.EXPERIMENTAL_LOGGING === 'true') {
+    return StylizedLogger;
   }
+  return Logger;
+};
 
-  const commandFn = dictionary.commands[formattedCommand];
-
-  if (commandFn) {
-    const member = values.join(' ');
-    try {
-      const result = commandFn(key, member);
-
-      if (result !== undefined) {
-        Logger.response(result);
-      }
-    } catch (error) {
-      Logger.error(error);
-    }
-  } else {
-    Logger.error('Unknown command');
+export const getMessages = () => {
+  if (process.env.EXPERIMENTAL_LOGGING === 'true') {
+    return {
+      prompt: c.styledPrompt,
+      initQuestion: c.styledInitQuestion,
+    };
   }
-
-  rl.prompt();
+  return { prompt: c.standardPrompt, initQuestion: c.standardInitQuestion };
 };
 
 export const arrayToFormattedString = (values: string[]) => {
@@ -47,14 +29,4 @@ export const arrayToFormattedString = (values: string[]) => {
   );
 
   return numberedArray.join('\n');
-};
-
-export const getMessages = () => {
-  if (process.env.EXPERIMENTAL_LOGGING === 'true') {
-    return {
-      prompt: c.styledPrompt,
-      question: c.styledQuestion,
-    };
-  }
-  return { prompt: c.standardPrompt, question: c.standardQuestion };
 };

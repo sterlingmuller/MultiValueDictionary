@@ -1,14 +1,14 @@
 import { arrayToFormattedString } from './utilities';
 
 class Logger {
-  response(result: string | string[] | boolean) {
+  static response(result: string | string[] | boolean) {
     if (Array.isArray(result)) {
       console.log(arrayToFormattedString(result));
     } else {
       console.log(`) ${result}`);
     }
   }
-  error(message: string, optionalParam?: string) {
+  static error(message: string, optionalParam?: string) {
     if (optionalParam) {
       console.error(`ERROR, ${message}: ${optionalParam}`);
     } else {

@@ -1,13 +1,13 @@
 import fs from 'fs';
-
-import Dictionary from '../src/dictionary';
-import createLogger from '../src/loggerFactory';
 import { ReadLine } from 'readline';
 
-jest.mock('../src/loggerFactory', () => {
-  const mockCreateLogger = { response: jest.fn(), error: jest.fn() };
-  return jest.fn(() => mockCreateLogger);
-});
+import Dictionary from '../src/dictionary';
+import {getLogger} from '../src/utilities';
+
+jest.mock('../src/utilities', () => ({
+  getLogger: jest.fn()
+    .mockReturnValue({ response: jest.fn(), error: jest.fn() }),
+}));
 
 describe('Dictionary', () => {
   let dictionary: Dictionary;
@@ -52,7 +52,7 @@ describe('Dictionary', () => {
   describe('add', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
-        expect(() => dictionary.add('test', undefined)).toThrow(
+        expect(() => dictionary.add('test', undefined as any)).toThrow(
           'ADD requires a key and a value',
         );
       });
@@ -77,7 +77,7 @@ describe('Dictionary', () => {
   describe('remove', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
-        expect(() => dictionary.remove('test', undefined)).toThrow(
+        expect(() => dictionary.remove('test', undefined as any)).toThrow(
           'REMOVE requires a key and a value',
         );
       });
@@ -174,7 +174,7 @@ describe('Dictionary', () => {
   describe('memberExists', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
-        expect(() => dictionary.memberExists('test', undefined)).toThrow(
+        expect(() => dictionary.memberExists('test', undefined as any)).toThrow(
           'MEMBEREXISTS requires a key and a value',
         );
       });
@@ -249,7 +249,7 @@ describe('Dictionary', () => {
 
     describe('when the filePath is not provided', () => {
       it('throws the expected error', () => {
-        expect(() => dictionary.import(undefined)).toThrow(
+        expect(() => dictionary.import(undefined as any)).toThrow(
           'IMPORT requires a file path',
         );
       });
@@ -262,7 +262,7 @@ describe('Dictionary', () => {
       });
     });
     describe('when the import fails', () => {
-      const mockLogger = createLogger();
+      const mockLogger = getLogger();
 
       describe('when there is a syntax error', () => {
         it('calls Logger.error with the expected message', () => {
@@ -322,7 +322,7 @@ describe('Dictionary', () => {
 
     describe('when the filePath is not provided', () => {
       it('throws the expected error', () => {
-        expect(() => dictionary.export(undefined)).toThrow(
+        expect(() => dictionary.export(undefined as any)).toThrow(
           'EXPORT requires a file path',
         );
       });
@@ -364,7 +364,7 @@ describe('Dictionary', () => {
           throw new Error(mockError);
         });
         const result = dictionary.export('blurg.json');
-        const mockLogger = createLogger();
+        const mockLogger = getLogger();
 
         expect(result).toEqual(undefined);
         expect(mockLogger.error).toHaveBeenCalledWith(
@@ -385,7 +385,7 @@ describe('Dictionary', () => {
 
   describe('exit', () => {
     it('calls Logger.response with the expected message and closes the app', () => {
-      const mockLogger = createLogger();
+      const mockLogger = getLogger();
       const mockRLInterface = { close: jest.fn() } as unknown as ReadLine;
       dictionary.exit(mockRLInterface);
 

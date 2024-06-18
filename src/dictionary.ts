@@ -1,9 +1,9 @@
 import fs from 'fs';
 import readline from 'readline';
 
-import createLogger from './loggerFactory';
+import {getLogger} from './utilities';
 
-const Logger = createLogger();
+const Logger = getLogger();
 
 class Dictionary {
   private data: Map<string, string[]>;
@@ -159,7 +159,7 @@ class Dictionary {
     }
     try {
       const fileContents = fs.readFileSync(filePath, { encoding: 'utf8' });
-      const data: { key: string[] } = JSON.parse(fileContents);
+      const data: { [key: string]: string[] } = JSON.parse(fileContents);
 
       for (const key in data) {
         this.data.set(key, data[key]);

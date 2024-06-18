@@ -53,7 +53,7 @@ describe('Dictionary', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
         expect(() => dictionary.add('test', undefined as any)).toThrow(
-          'ADD requires a key and a value',
+          'ADD requires a key and a member',
         );
       });
     });
@@ -78,7 +78,7 @@ describe('Dictionary', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
         expect(() => dictionary.remove('test', undefined as any)).toThrow(
-          'REMOVE requires a key and a value',
+          'REMOVE requires a key and a member',
         );
       });
     });
@@ -175,7 +175,7 @@ describe('Dictionary', () => {
     describe('when a parameter is missing', () => {
       it('throws the expected error', () => {
         expect(() => dictionary.memberExists('test', undefined as any)).toThrow(
-          'MEMBEREXISTS requires a key and a value',
+          'MEMBEREXISTS requires a key and a member',
         );
       });
     });

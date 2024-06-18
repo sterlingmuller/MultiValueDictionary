@@ -34,8 +34,13 @@ This interactive command-line application allows you to manage a multi-value dic
       ```bash
       npm install
    ```
+   **Note:**
+   This will give a deprecated warning for the inflight and globe packages used in jest.
+   The latest version of jest addresses this issue however, this version is currently in beta and is not supported by ts-jest.
+   MV Dictionary is using the most recent stable version of jest, 29.7.0.
+   For more details see: [https://github.com/jestjs/jest/issues/15087](https://github.com/jestjs/jest/issues/15087)
 
-3. **Build and run the project:**
+4. **Build and run the project:**
    There are two ways to run the project:
 
    - **Standard Mode:**

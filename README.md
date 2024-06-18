@@ -21,11 +21,12 @@ This interactive command-line application allows you to manage a multi-value dic
 **Prerequisites:**
 
    - Node.js: Ensure you have Node.js installed on your system. You can download it from the official website: [https://nodejs.org/](https://nodejs.org/)
+   - Git: Ensure you have Git installed on your system if you wish to clone the repository. You can download it from the official website: [https://git-scm.com/](https://git-scm.com/) 
 
 1. **Clone the Repository:**
 
    ```bash
-   git clone <https://github.com/sterlingmuller/MultiValueDictionary.git>
+   git clone https://github.com/sterlingmuller/MultiValueDictionary.git
    cd MultiValueDictionary
    ```
 

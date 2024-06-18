@@ -1,13 +1,13 @@
+import fs from 'fs';
+import readline from 'readline';
+
+import createLogger from './loggerFactory';
+
+const Logger = createLogger();
+
 class Dictionary {
   private data: Map<string, string[]>;
   public commands: { [key: string]: Function };
-  private arrayToNumberedString(array: string[]) {
-    const numberedArray = array.map(
-      (value: string, index: number) => `${index + 1}) ${value}`,
-    );
-
-    return numberedArray.join('\n');
-  }
 
   constructor() {
     this.data = new Map<string, string[]>();
@@ -22,20 +22,15 @@ class Dictionary {
       MEMBEREXISTS: this.memberExists.bind(this),
       ALLMEMBERS: this.allMembers.bind(this),
       ITEMS: this.items.bind(this),
-      HELP: this.help.bind(this)
+      HELP: this.help.bind(this),
+      IMPORT: this.import.bind(this),
+      EXPORT: this.export.bind(this),
+      EXIT: this.exit.bind(this),
     };
   }
 
   keys() {
-    const keysArr = [...this.data.keys()];
-
-    if (keysArr.length === 0) {
-      return '(empty set)';
-    }
-
-    const keysString = this.arrayToNumberedString(keysArr);
-
-    return keysString;
+    return [...this.data.keys()];
   }
 
   members(key: string) {
@@ -45,12 +40,10 @@ class Dictionary {
 
     const membersArr = this.data.get(key);
     if (!membersArr) {
-      throw 'Key does not exist';
-    } else {
-      const membersStr = this.arrayToNumberedString(membersArr);
-
-      return membersStr;
+      throw 'key does not exist';
     }
+
+    return membersArr;
   }
 
   add(key: string, value: string) {
@@ -59,7 +52,7 @@ class Dictionary {
     if (!key || !value) {
       throw 'ADD requires a key and a value';
     } else if (values.includes(value)) {
-      throw 'Member already exists for the key';
+      throw 'member already exists for the key';
     } else {
       values.push(value);
 
@@ -75,9 +68,9 @@ class Dictionary {
     if (!key || !value) {
       throw 'REMOVE requires a key and a value';
     } else if (!membersArr) {
-      throw 'Key does not exist';
+      throw 'key does not exist';
     } else if (!membersArr.includes(value)) {
-      throw 'Member does not exist on key';
+      throw 'member does not exist on key';
     } else if (membersArr.length === 1) {
       this.data.delete(key);
 
@@ -96,7 +89,7 @@ class Dictionary {
     if (!key) {
       throw 'REMOVEALL requires a key';
     } else if (!this.data.get(key)) {
-      throw 'Key does not exist';
+      throw 'key does not exist';
     } else {
       this.data.delete(key);
 
@@ -114,9 +107,7 @@ class Dictionary {
     if (!key) {
       throw 'KEYEXISTS requires a key';
     } else {
-      const hasKey = this.data.has(key);
-
-      return hasKey;
+      return this.data.has(key);
     }
   }
 
@@ -126,9 +117,7 @@ class Dictionary {
     } else {
       const members = this.data.get(key) || [];
 
-      const hasMember = members.includes(value);
-
-      return hasMember;
+      return members.includes(value);
     }
   }
 
@@ -139,13 +128,7 @@ class Dictionary {
       allMembers.push(...values);
     }
 
-    if (allMembers.length === 0) {
-      return '(empty set)';
-    }
-
-    const allMembersStr = this.arrayToNumberedString(allMembers);
-
-    return allMembersStr;
+    return allMembers;
   }
 
   items() {
@@ -157,13 +140,7 @@ class Dictionary {
       }
     }
 
-    if (itemsArray.length === 0) {
-      return '(empty set)';
-    }
-
-    const itemsString = this.arrayToNumberedString(itemsArray);
-
-    return itemsString;
+    return itemsArray;
   }
 
   help() {
@@ -171,6 +148,67 @@ class Dictionary {
     const commandsStr = commandsArr.join(' ');
 
     return commandsStr;
+  }
+
+  import(filePath: string) {
+    if (!filePath) {
+      throw 'IMPORT requires a file path';
+    }
+    if (!filePath.endsWith('.json')) {
+      throw 'only JSON files are supported';
+    }
+    try {
+      const fileContents = fs.readFileSync(filePath, { encoding: 'utf8' });
+      const data: { key: string[] } = JSON.parse(fileContents);
+
+      for (const key in data) {
+        this.data.set(key, data[key]);
+      }
+
+      return 'Dictionary imported!';
+    } catch (error: any) {
+      if (error.name === 'SyntaxError') {
+        Logger.error('invalid JSON syntax', error.message);
+        return;
+      }
+      if (error.code === 'ENOENT') {
+        throw 'file not found';
+      }
+      Logger.error('import failed', error.message);
+      return;
+    }
+  }
+
+  export(filePath: string) {
+    if (!filePath) {
+      throw 'EXPORT requires a file path';
+    }
+    if (!filePath.endsWith('.json')) {
+      throw "invalid file path. The file must have a '.json' extension";
+    }
+    if (this.data.size === 0) {
+      throw 'there is nothing to export';
+    }
+
+    const fileData = JSON.stringify(Object.fromEntries(this.data), null, 2);
+
+    try {
+      fs.writeFileSync(filePath, fileData);
+
+      return 'Dictionary exported!';
+    } catch (error: any) {
+      if (error.code === 'ENOENT') {
+        throw `directory not found`;
+      } else {
+        Logger.error('export failed', error.message);
+        return;
+      }
+    }
+  }
+
+  exit(rlInterface: readline.Interface) {
+    Logger.response('Goodbye!');
+    rlInterface.close();
   }
 }
 

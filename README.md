@@ -12,8 +12,8 @@ This interactive command-line application allows you to manage a multi-value dic
 - **ITEMS:** Returns a numbered list of keys with their members.
 - **CLEAR:** Clears all data from the dictionary.
 - **HELP:** Displays a list of available commands.
-- **IMPORT &lt;filepath>.json:** Imports data from a JSON file.
-- **EXPORT &lt;filepath>.json:** Exports data to a JSON file.
+- **IMPORT &lt;filepath>.json:** Imports dictionary from a JSON file.
+- **EXPORT &lt;filepath?>:** Exports dictionary to a JSON file.
 - **EXIT:** Exits the application.
 
 ## Installation

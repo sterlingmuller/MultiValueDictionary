@@ -13,20 +13,25 @@ export const getMessages = () => {
   if (process.env.EXPERIMENTAL_LOGGING === 'true') {
     return {
       prompt: c.styledPrompt,
-      initQuestion: c.styledInitQuestion,
+      createDictionary: c.styledCreateDictionary,
+      useDictionary: c.styledUseDictionary,
     };
   }
-  return { prompt: c.standardPrompt, initQuestion: c.standardInitQuestion };
+  return {
+    prompt: c.standardPrompt,
+    createDictionary: c.standardCreateDictionary,
+    useDictionary: c.standardUseDictionary,
+  };
 };
 
-export const arrayToFormattedString = (values: string[]) => {
-  if (values.length === 0) {
+export const arrayToFormattedString = (members: string[]) => {
+  if (members.length === 0) {
     return '(empty set)';
   }
 
-  const numberedArray = values.map(
-    (value: string, index: number) => `${index + 1}) ${value}`,
+  const formattedMembers = members.map(
+    (member: string, index: number) => `${index + 1}) ${member}`,
   );
 
-  return numberedArray.join('\n');
+  return formattedMembers.join('\n');
 };

@@ -9,8 +9,12 @@ export const RESPONSE_COLOR = `${cyan}%s${reset}`;
 export const ERROR_COLOR = `${red}%s${reset}`;
 
 export const styledPrompt = `${green}>${reset} `;
-export const styledInitQuestion = `${green}Type a command to get started\nTip: You can use the 'Help' command to see a list of commands available\n>${reset} `;
+export const styledUseDictionary = `${green}Type a command to use your new dictionary\nTip: You can use the 'Help' command to see a list of commands available\n>${reset} `;
+export const styledCreateDictionary = `${green}Enter the name of your dictionary to get started\n>${reset} `;
+
 
 export const standardPrompt = '> ';
-export const standardInitQuestion =
-  "Type a command to get started\nTip: You can use the 'Help' command to see a list of commands available\n> ";
+export const standardUseDictionary=
+  "Type a command to use your new dictionary\nTip: You can use the 'Help' command to see a list of commands available\n> ";
+  export const standardCreateDictionary = 'Enter the name of your dictionary to get started\n> ';
+

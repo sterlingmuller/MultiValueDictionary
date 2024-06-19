@@ -5,7 +5,8 @@ import { getLogger, getMessages } from './utilities';
 
 const Logger = getLogger();
 const indexMessages = getMessages();
-const dictionary = new Dictionary();
+let dictionary: Dictionary;
+
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
@@ -45,4 +46,9 @@ rl.prompt();
 
 rl.on('line', handleCommand);
 
-rl.question(indexMessages.initQuestion, handleCommand);
+rl.question(indexMessages.createDictionary, (userInput: string) => {
+  dictionary = new Dictionary(userInput);
+  Logger.response(`${userInput} created!`);
+
+  rl.question(indexMessages.useDictionary, handleCommand);
+});

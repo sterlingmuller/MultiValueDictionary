@@ -7,9 +7,11 @@ const Logger = getLogger();
 
 class Dictionary {
   private data: Map<string, string[]>;
+  private name: string
   public commands: { [key: string]: Function };
 
-  constructor() {
+  constructor(name: string) {
+    this.name = name;
     this.data = new Map<string, string[]>();
     this.commands = {
       KEYS: this.keys.bind(this),
@@ -25,7 +27,7 @@ class Dictionary {
       HELP: this.help.bind(this),
       IMPORT: this.import.bind(this),
       EXPORT: this.export.bind(this),
-      EXIT: this.exit.bind(this),
+      EXIT: this.exit,
     };
   }
 
@@ -176,13 +178,11 @@ class Dictionary {
     }
   }
 
-  export(filePath: string) {
-    if (!filePath) {
-      throw 'EXPORT requires a file path';
-    }
-    if (!filePath.endsWith('.json')) {
-      throw "invalid file path. The file must have a '.json' extension";
-    }
+  export(filePath?: string) {
+    const exportString = filePath
+      ? `${filePath}${this.name}.json`
+      : `${this.name}.json`;
+
     if (this.data.size === 0) {
       throw 'there is nothing to export';
     }
@@ -190,7 +190,7 @@ class Dictionary {
     const fileData = JSON.stringify(Object.fromEntries(this.data), null, 2);
 
     try {
-      fs.writeFileSync(filePath, fileData);
+      fs.writeFileSync(exportString, fileData);
 
       return 'Dictionary exported!';
     } catch (error: any) {

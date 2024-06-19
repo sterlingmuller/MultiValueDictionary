@@ -21,7 +21,7 @@ This interactive command-line application allows you to manage a multi-value dic
 **Prerequisites:**
 
    - Node.js: Ensure you have Node.js installed on your system. You can download it from the official website: [https://nodejs.org/](https://nodejs.org/)
-   - Git: Ensure you have Git installed on your system if you wish to clone the repository. You can download it from the official website: [https://git-scm.com/](https://git-scm.com/) 
+   - Git: Ensure you have Git installed on your system if you wish to clone the repository. You can download it from the official website: [https://git-scm.com/](https://git-scm.com/)
 
 1. **Clone the Repository:**
 
@@ -64,4 +64,4 @@ To view a coverage report, you can run:
 npm run test:coverage
 ```
 
-Example dictionary files for testing the `IMPORT` command can be found in the `test/assets` folder.
+Example dictionary files for manually testing the `IMPORT` command can be found in the `test/assets` folder.

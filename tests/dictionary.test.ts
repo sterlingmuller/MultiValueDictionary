@@ -9,10 +9,12 @@ jest.mock('../src/utilities', () => ({
     .mockReturnValue({ response: jest.fn(), error: jest.fn() }),
 }));
 
+const mockDictionaryName = 'mockDictionaryName';
+
 describe('Dictionary', () => {
   let dictionary: Dictionary;
   beforeEach(() => {
-    dictionary = new Dictionary();
+    dictionary = new Dictionary(mockDictionaryName);
   });
 
   describe('keys', () => {
@@ -320,20 +322,6 @@ describe('Dictionary', () => {
       jest.clearAllMocks();
     });
 
-    describe('when the filePath is not provided', () => {
-      it('throws the expected error', () => {
-        expect(() => dictionary.export(undefined as any)).toThrow(
-          'EXPORT requires a file path',
-        );
-      });
-    });
-    describe('when the filePath does not have the JSON extension', () => {
-      it('throws the expected error', () => {
-        expect(() => dictionary.export('blarg.doc')).toThrow(
-          "invalid file path. The file must have a '.json' extension",
-        );
-      });
-    });
     describe('when the dictionary is empty', () => {
       it('throws the expected error', () => {
         expect(() => dictionary.export('test.json')).toThrow(
@@ -373,13 +361,27 @@ describe('Dictionary', () => {
         );
       });
     });
-    it("exports the provided file and returns 'Dictionary exported!'", () => {
-      dictionary.add('test', 'one');
+    describe('when the filePath is provided', () => {
+      it("exports the dictionary to the filePath and returns 'Dictionary exported!'", () => {
+        dictionary.add('test', 'one');
 
-      jest.spyOn(fs, 'writeFileSync').mockReturnValueOnce(undefined);
-      const result = dictionary.export('goodDictionary.json');
+        jest.spyOn(fs, 'writeFileSync').mockReturnValueOnce(undefined);
+        const result = dictionary.export('tests/assets/');
 
-      expect(result).toEqual('Dictionary exported!');
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`tests/assets/${mockDictionaryName}.json`, expect.anything());
+        expect(result).toEqual('Dictionary exported!');
+      });
+    });
+    describe('when the filePath is not provided', () => {
+      it("exports the dictionary to the current directory and returns 'Dictionary exported!'", () => {
+        dictionary.add('test', 'one');
+
+        jest.spyOn(fs, 'writeFileSync').mockReturnValueOnce(undefined);
+        const result = dictionary.export();
+
+        expect(fs.writeFileSync).toHaveBeenCalledWith(`${mockDictionaryName}.json`, expect.anything());
+        expect(result).toEqual('Dictionary exported!');
+      });
     });
   });
 
